@@ -96,21 +96,52 @@ class ViewController: UIViewController {
     
         view.addSubview(attackTypeButton)
         
-        snowSpawn = Timer.scheduledTimer(timeInterval: 0.05, target: self, selector: #selector(ViewController.snowSpawner), userInfo: nil, repeats: true)
-        snowFall = Timer.scheduledTimer(timeInterval:0.015, target: self, selector: #selector(ViewController.snowFaller), userInfo: nil, repeats: true)
-        walkTimer = Timer.scheduledTimer(timeInterval:0.1, target: self, selector: #selector(ViewController.walkChanger), userInfo: nil, repeats: true)
-        snowmanSpawn = Timer.scheduledTimer(timeInterval:2.0, target: self, selector: #selector(ViewController.snowmanSpawner), userInfo: nil, repeats: true)
+        snowSpawn = Timer.scheduledTimer(timeInterval: 0.05,
+                                         target: self,
+                                         selector: #selector(ViewController.snowSpawner),
+                                         userInfo: nil,
+                                         repeats: true)
+        
+        snowFall = Timer.scheduledTimer(timeInterval:0.015,
+                                        target: self,
+                                        selector: #selector(ViewController.snowFaller),
+                                        userInfo: nil,
+                                        repeats: true)
+        
+        walkTimer = Timer.scheduledTimer(timeInterval:0.1,
+                                         target: self,
+                                         selector: #selector(ViewController.walkChanger),
+                                         userInfo: nil,
+                                         repeats: true)
+        
+        snowmanSpawn = Timer.scheduledTimer(timeInterval:2.0,
+                                            target: self,
+                                            selector: #selector(ViewController.snowmanSpawner),
+                                            userInfo: nil,
+                                            repeats: true)
 
-        timeScoreTimer = Timer.scheduledTimer(timeInterval:1.0, target: self, selector: #selector(ViewController.timeScore), userInfo: nil, repeats: true)
+        timeScoreTimer = Timer.scheduledTimer(timeInterval:1.0,
+                                              target: self,
+                                              selector: #selector(ViewController.timeScore),
+                                              userInfo: nil,
+                                              repeats: true)
         
         view.backgroundColor = UIColor.init(red: 0.75, green: 0.96, blue: 1.0, alpha: 0.95)
         
-        gameFloor = UIImageView.init(frame: CGRect(x:0, y:self.view.frame.size.height - 40, width:self.view.frame.size.width * 2, height:200))
+        gameFloor = UIImageView.init(frame: CGRect(x:0, 
+                                                   y:self.view.frame.size.height - 40,
+                                                   width:self.view.frame.size.width * 2,
+                                                   height:200))
+        
         gameFloor.image = UIImage.init(named: "ice001")
         gameFloor.layer.zPosition = 100
         view.addSubview(gameFloor)
         
-        gameFloor2 = UIImageView.init(frame: CGRect(x:self.view.frame.size.width * 2, y:self.view.frame.size.height - 40, width:self.view.frame.size.width * 2, height:200))
+        gameFloor2 = UIImageView.init(frame: CGRect(x:self.view.frame.size.width * 2,
+                                                    y:self.view.frame.size.height - 40,
+                                                    width:self.view.frame.size.width * 2,
+                                                    height:200))
+        
         gameFloor2.image = UIImage.init(named: "ice001")
         gameFloor2.layer.zPosition = 100
         view.addSubview(gameFloor2)
@@ -161,7 +192,11 @@ class ViewController: UIViewController {
         if flakeSize < 5 {
             flakeSize = 5
         }
-        let aSnowFlake = UIImageView.init(frame: CGRect(x:CGFloat(Int(arc4random()) % Int(self.view.frame.size.width)) + 60 ,y:-25, width:CGFloat(flakeSize), height:CGFloat(flakeSize)))
+        let aSnowFlake = UIImageView.init(frame: CGRect(x:CGFloat(Int(arc4random()) % Int(self.view.frame.size.width)) + 60,
+                                                        y:-25, 
+                                                        width:CGFloat(flakeSize),
+                                                        height:CGFloat(flakeSize)))
+        
         aSnowFlake.image = UIImage.init(named: "snow001")
         aSnowFlake.alpha = 0.82
         view.isOpaque = false
@@ -170,12 +205,14 @@ class ViewController: UIViewController {
         view.addSubview(aSnowFlake)
     }
     
-    @objc func snowFaller(){
+    @objc func snowFaller() {
         
         for (index, _) in snowMen.enumerated().reversed() {
             if hp > 0 {
                 snowMen[index].frame.origin.x -= 1.5
+                
                 if view.subviews.contains(shot) && snowMen[index].frame.origin.x < shot.frame.origin.x && toon.frame.origin.x + toon.frame.size.width < snowMen[index].frame.origin.x {
+                    
                     if shot.frame.origin.y + shot.frame.size.height > snowMen[index].frame.origin.y {
                         shot.removeFromSuperview()
                         snowMen[index].removeFromSuperview()
@@ -186,28 +223,33 @@ class ViewController: UIViewController {
                         continue
                     }
                 }
+                
                 if snowMen[index].frame.origin.x < toon.frame.origin.x + toon.frame.size.width/2 {
                     if toon.frame.origin.y + (toon.frame.size.width/3)  > snowMen[index].frame.origin.y {
                         snowMen[index].removeFromSuperview()
                         snowMen.remove(at: index)
-                    
                         hp -= 20
-                        if(hp <= 0){
+                        
+                        if hp <= 0 {
                             print("dead!")
                             hpBar.frame = CGRect(x:self.view.frame.size.width - 120, y:30, width:hp, height:10)
                             toon.frame = CGRect(x:0 - 100, y:30, width:hp, height:10)
                         }
-                        if(hp >= 0){
+                        
+                        if hp >= 0 {
                             hpBar.frame = CGRect(x:self.view.frame.size.width - 120, y:30, width:hp, height:10)
                         }
-                            print("damage")
+                        
+                        print("damage")
                         continue
                     }
                 
                 }
+                
                 if snowMen[index].frame.origin.x < -40 {
                     snowMen[index].removeFromSuperview()
                     snowMen.remove(at: index)
+                    
                     continue
                 }
             }
@@ -216,6 +258,7 @@ class ViewController: UIViewController {
         pointBoard.text = String(points)
         
         shot.frame.origin.x += 15
+        
         if shot.frame.origin.x > self.view.frame.size.width + 40 {
             shot.removeFromSuperview()
         }
@@ -225,7 +268,7 @@ class ViewController: UIViewController {
         
         if gameFloor.frame.origin.x < (self.view.frame.size.width * 2) * -1 {
             gameFloor.frame.origin.x = self.view.frame.size.width * 2
-        }else if gameFloor2.frame.origin.x < (self.view.frame.size.width * 2) * -1 {
+        } else if gameFloor2.frame.origin.x < (self.view.frame.size.width * 2) * -1 {
             gameFloor2.frame.origin.x = self.view.frame.size.width * 2
         }
 
@@ -240,12 +283,12 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func walkChanger(){
+    @objc func walkChanger() {
         if animType == 1 {
             if animCounter == 3 {
                 toon.image = toonWalk1
                 animCounter = 1
-            }else if animCounter == 2 {
+            } else if animCounter == 2 {
                 toon.image = toonWalk2
                 animCounter = 3
             } else {
@@ -264,13 +307,13 @@ class ViewController: UIViewController {
             if animType == 3 {
                 if animCounter < 7 {
                     animCounter += 1
-                    if dblJump == true{
+                    if dblJump == true {
                         if animCounter == 6 {
                             toon.frame.origin.y -= 5
-                        }else{
+                        } else {
                             toon.frame.origin.y -= 32
                         }
-                    }else{
+                    } else {
                         toon.frame.origin.y -= 25
                     }
                     
@@ -280,7 +323,7 @@ class ViewController: UIViewController {
                 } else {
                     if dblJump == true {
                         toon.frame.origin.y += 23
-                    }else{
+                    } else {
                         toon.frame.origin.y += 27
                     }
                     
@@ -301,7 +344,7 @@ class ViewController: UIViewController {
     }
     
     @objc func doubleTap() {
-        if view.subviews.contains(shot){
+        if view.subviews.contains(shot) {
             
         } else {
             if animType == 3 {
@@ -318,14 +361,14 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func upSwipe(){
-        if dblJump == false{
-            if(animType == 3){
+    @objc func upSwipe() {
+        if dblJump == false {
+            if animType == 3 {
                 animType = 4
                 animCounter = 1
                 dblJump = true
                 toon.image = toonJump1
-            }else{
+            } else {
                 animType = 3
                 animCounter = 1
                 toon.image = toonJump1
@@ -333,8 +376,7 @@ class ViewController: UIViewController {
         }
     }
     
-    @objc func snowmanSpawner(){
-        
+    @objc func snowmanSpawner() {
         //spawnTimer = spawnTimer - (spawnTimer * 0.0015)
         //snowmanSpawn = NSTimer.scheduledTimer(spawnTimer, target: self, selector: #selector(ViewController.snowmanSpawner), userInfo: nil, repeats: true)
         //spawnlb.text = String(spawnTimer)
@@ -355,14 +397,15 @@ class ViewController: UIViewController {
                     sMan.image = UIImage.init(named: "snowman001")
                     view.addSubview(sMan)
                     snowMen.append(sMan)
-                }else if random == 2 || random == 0 {
+                } else if random == 2 || random == 0 {
                     random = Int(arc4random_uniform(100))
+                    
                     if random <= 45 {
                         let sMan = UIImageView.init(frame: CGRect(x:view.frame.size.width + 100, y:view.frame.size.height - 75, width:40, height:40))
                         sMan.image = UIImage.init(named: "snowman001")
                         view.addSubview(sMan)
                         snowMen.append(sMan)
-                    }else if random <= 75 {
+                    } else if random <= 75 {
                         let sMan = UIImageView.init(frame: CGRect(x:view.frame.size.width + 100, y:view.frame.size.height - 75, width:40, height:40))
                         sMan.image = UIImage.init(named: "snowman001")
                         view.addSubview(sMan)
@@ -372,7 +415,7 @@ class ViewController: UIViewController {
                         sMan2.image = UIImage.init(named: "snowman001")
                         view.addSubview(sMan2)
                         snowMen.append(sMan2)
-                    }else{
+                    } else {
                         let sMan = UIImageView.init(frame: CGRect(x:view.frame.size.width + 100, y:view.frame.size.height - 75, width:40, height:40))
                         sMan.image = UIImage.init(named: "snowman001")
                         view.addSubview(sMan)
@@ -389,11 +432,11 @@ class ViewController: UIViewController {
                         snowMen.append(sMan3)
                     }
                 }
-            }else{
+            } else {
                 spawnAmount = 0
                 miniBossCount += 1
                 
-                if miniBossCount == 1{
+                if miniBossCount == 1 {
                     
                     let sMan = UIImageView.init(frame: CGRect(x:view.frame.size.width + 100, y:view.frame.size.height - 75, width:40, height:40))
                     sMan.image = UIImage.init(named: "snowman001")
@@ -420,26 +463,25 @@ class ViewController: UIViewController {
                     view.addSubview(sMan5)
                     snowMen.append(sMan5)
                     
-                }else if  miniBossCount == 2 {
+                } else if  miniBossCount == 2 {
                 
                     let sMan3 = UIImageView.init(frame: CGRect(x:view.frame.size.width + 245, y:view.frame.size.height - 135, width:100, height:100))
                     sMan3.image = UIImage.init(named: "snowmansad01")
                     view.addSubview(sMan3)
                     snowMen.append(sMan3)
                     
-                }else if miniBossCount == 3 {
+                } else if miniBossCount == 3 {
                     miniBossCount = 0
                     let sMan3 = UIImageView.init(frame: CGRect(x:view.frame.size.width + 245, y:50, width:50, height:50))
                     sMan3.image = UIImage.init(named: "snowman001")
                     view.addSubview(sMan3)
                     snowMen.append(sMan3)
                 }
-                
             }
         }
     }
 
-    @objc func timeScore(){
+    @objc func timeScore() {
         points += 1;
         levelTimer += 1;
     }
@@ -448,7 +490,7 @@ class ViewController: UIViewController {
         if attWeapon == 0 {
             attWeapon = 1
             attackTypeButton.setImage(attTwoIcon, for: [])
-        }else {
+        } else {
             attWeapon = 0
             attackTypeButton.setImage(attOneIcon, for: [])
         }
